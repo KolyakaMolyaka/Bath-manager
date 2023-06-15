@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% import 'manager_header_macro.html' as header %}
+
+{% block page_title %} Неоплаченные заказы {% endblock %}
+
+{% block page_header %}
+{{ header.manager_page_header() }}
+{% endblock %}
+
+
+{% block page_content %}
+<h1>Неоплаченные заказы</h1>
+{% if possible_payments %}
+<table class="table text-center">
+    <thead class="table-primary align-middle">
+<!--    <td>ID заказа</td>-->
+    <td>Стоимость заказа</td>
+    <td>Дата бронирования</td>
+    <td>Время бронирования</td>
+    <td>Количество арендованных часов</td>
+    <td>Стоимость заказа</td>
+    <td>Номер телефона клиента</td>
+    <td class="align-middle">Оплата</td>
+    </thead>
+    {% for order in possible_payments %}
+    <tr>
+<!--        <td class="align-middle">{{ order['order_id'] }}</td>-->
+        <td class="align-middle">{{ order['order_cost'] }}</td>
+        <td class="align-middle">{{ order['order_booking_date'].strftime('%Y-%m-%d') }}</td>
+        <td class="align-middle">{{ order['order_booking_date'].strftime('%H:%M') }}</td>
+        <td class="align-middle">{{ order['order_rent_in_hours'] }}</td>
+        <td class="align-middle">{{ order['order_cost'] }}</td>
+        <td class="align-middle">{{ order['client_phone'] }}</td>
+       <td>
+<!--Кнопка-триггер модального окна-->
+            <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+               Создать
+            </button>
+<!--Модальное окно-->
+            <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false"
+                 tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="staticBackdropLabel">Создание оплаты</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Закрыть"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form class="form" method="post" action="{{ url_for('manager.unpaid_orders.create_payment', order_id=order['order_id']) }}">
+                                <div class="mb-3">
+                                    <label for="payment">Тип оплаты</label>
+                                    <select id="payment" class="form-select" name="payment_type">
+                                        <option value="nocash">Безналичные</option>
+                                        <option value="cash">Наличные</option>
+                                    </select>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label for="payment_req">Реквизиты оплаты</label>
+                                    <input id="payment_req" type="text" class="form-control" name="payment_req">
+                                </div>
+
+                                <input style="display:none;" name="order_id" value="{{ order['preorder_id'] }}">
+
+                                <button class="btn btn-success" type="submit">Создать</button>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </td>
+
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Неоплаченные заказы отсутствуют</p>
+{% endif %}
+
+{% endblock %}

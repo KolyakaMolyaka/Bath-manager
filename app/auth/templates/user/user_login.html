@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% import 'user/auth_header_macro.html' as header %}
+
+{% block page_title %} Авторизация {% endblock %}
+{% block page_header %}
+{{ header.auth_header() }}
+{% endblock %}
+
+
+{% block page_content %}
+
+{% for msg in get_flashed_messages() %}
+<div class="btn btn-info text-light">
+    {{ msg }}
+</div>
+{% endfor %}
+
+<h1>Авторизация клиента</h1>
+
+<form class="col-md-3"
+      action="{{ url_for('auth.login.login') }}"
+      method="post">
+
+    <div class="mb-3">
+        {{ form.phone.label }}: {{ form.phone(class='form-control') }}
+        {{ form.password.label }} : {{ form.password(type="password", class='form-control') }}
+    </div>
+
+    <button type="submit" class="btn btn-primary">Войти</button>
+</form>
+
+{% endblock %}

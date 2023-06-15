@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% import 'admin_header_macro.html' as header %}
+
+{% block page_title %} Добавление менеджера {% endblock %}
+
+{% block page_header %}
+{{ header.admin_page_header() }}
+{% endblock %}
+
+{% block page_content %}
+<h1>Добавление менеджера</h1>
+
+{% for msg in get_flashed_messages() %}
+<div class="btn btn-info text-light">{{ msg }}</div>
+{% endfor %}
+
+
+<form class="form" action="{{ url_for('admin.edit_managers.add_manager') }}" method="POST">
+
+    {{ form.name.label(class="form-label mb-1") }}: {{ form.name(class="form-control mb-3") }}
+    {{ form.surname.label(class="form-label mb-1") }}: {{ form.surname(class="form-control mb-3") }}
+    {{ form.lastname.label(class="form-label mb-1") }}: {{ form.lastname(class="form-control mb-3") }}
+    {{ form.phone.label(class="form-label mb-1") }}: {{ form.phone(class="form-control mb-3") }}
+    {{ form.salary.label(class="form-label mb-1") }}: {{ form.salary(class="form-control mb-3") }}
+    {{ form.password.label(class="form-label mb-1") }}: {{ form.password(class="form-control mb-3") }}
+
+    {% for err in form.password_confirm.errors %}
+    <div class="btn btn-info text-light d-block mb-3">{{ err }}</div>
+    {% endfor %}
+
+    {{ form.password_confirm.label(class="form-label mb-1") }}: {{ form.password_confirm(class="form-control mb-3") }}
+
+<!--
+    <div class="mb-3">
+        <label for="manager_name">Имя</label>
+        <input class="form-control" id="manager_name" placeholder="Иванов" name="name" required>
+    </div>
+    <div class="mb-3">
+        <label for="manager_surname">Фамилия</label>
+        <input class="form-control" id="manager_surname" placeholder="Иван" name="surname" required>
+    </div>
+    <div class="mb-3">
+        <label for="manager_middlename">Отчество</label>
+        <input class="form-control" id="manager_middlename" placeholder="Иванович" name="lastname" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="manager_password">Пароль</label>
+        <input class="form-control" id="manager_password" placeholder="12345" name="password" required>
+    </div>
+
+    <div class="mb-3">
+        <label for="manager_phone">Телефон</label>
+        <input class="form-control" id="manager_phone" placeholder="89205392642" name="phone" required>
+    </div>
+    <div class="mb-3">
+        <label for="manager_passport">Паспорт</label>
+        <input class="form-control" id="manager_passport" placeholder="2716620418" name="passport" required>
+    </div>
+-->
+    <button class="btn btn-success" type="submit">Добавить</button>
+</form>
+{% endblock %}

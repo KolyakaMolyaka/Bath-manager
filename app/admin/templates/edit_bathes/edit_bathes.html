@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% import 'admin_header_macro.html' as header %}
+
+{% block page_title %} Редактирование менеджеров {% endblock %}
+
+{% block page_header %}
+{{ header.admin_page_header() }}
+{% endblock %}
+
+{% block page_content %}
+<h1>Редактор бань</h1>
+<a class="btn btn-primary mb-3" href="{{ url_for('admin.edit_bath.add_bath') }}">Добавить баню</a>
+<table class="table text-center">
+    <thead class="table-primary">
+    <td class="align-middle">Адрес</td>
+    <td class="align-middle">Смоимость часа аренды</td>
+    <td class="align-middle">Банные принадлежности</td>
+    <td class="align-middle">Время открытия</td>
+    <td class="align-middle">Время закрытия</td>
+    <td class="align-middle">Вместимость (людей)</td>
+    <td class="align-middle">Статус</td>
+    <td class="align-middle">Действие</td>
+    </thead>
+    {% for bath in bathes %}
+    <tr>
+        <td class="align-middle">{{ bath['bath_address'] }}</td>
+        <td class="align-middle">{{ bath['bath_per_hour_rent'] }}</td>
+        <td class="align-middle">{% if bath['bath_accessories'] %} Присутствуют {% else %} Отсутствуют {% endif %}</td>
+        <td class="align-middle">{{ bath['bath_working_hours_from'] }}</td>
+        <td class="align-middle">{{ bath['bath_working_hours_to'] }}</td>
+        <td class="align-middle">{{ bath['bath_human_capacity'] }}</td>
+        <td class="align-middle">{% if bath['bath_status'] %} Не в архиве {% else %} В архиве {% endif %}</td>
+        <td>
+            <a class="btn btn-success" href="{{ url_for('admin.edit_bath.edit_bath', bath_id=bath['bath_id']) }}">
+                Редактировать
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

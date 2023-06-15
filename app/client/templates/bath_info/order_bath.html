@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% import 'client_header_macro.html' as header %}
+
+{% block page_title %} Подробности бани {% endblock %}
+
+{% block page_header %}
+{{ header.client_page_header() }}
+{% endblock %}
+
+
+{% block page_content %}
+
+<form class="form" method="post" action="{{ url_for('client.catalog.order_bath', bath_id=bath_id) }}">
+    {{ form.order_rent_hours.label(class="form-label") }}: {{ form.order_rent_hours(class="form-control") }}
+    {{ form.booking_date.label(class="form-label") }}: {{ form.booking_date(class="form-control") }}
+</form>
+
+{% endblock %}

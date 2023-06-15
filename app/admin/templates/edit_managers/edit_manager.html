@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% import 'admin_header_macro.html' as header %}
+
+{% block page_title %} Редактирование менеджера {% endblock %}
+
+{% block page_header %}
+{{ header.admin_page_header() }}
+{% endblock %}
+
+
+{% block page_content %}
+<form class="form" action="{{ url_for('admin.edit_managers.edit_manager', phone=manager['manager_phone']) }}" method="POST">
+    {{ form.phone.label(class="form-label") }}: {{ form.phone(class="form-control mb-3") }}
+    {{ form.name.label(class="form-label") }}: {{ form.name(class="form-control mb-3") }}
+    {{ form.surname.label(class="form-label") }}: {{ form.surname(class="form-control mb-3") }}
+    {{ form.lastname.label(class="form-label") }} {{ form.lastname(class="form-control mb-3") }} <br>
+    {{ form.password.label(class="form-label") }}: {{ form.password(class="form-control mb-3") }}
+    {{ form.salary.label(class="form-label") }}: {{ form.salary(class="form-control mb-3") }}
+
+    <button class="btn btn-primary" type="submit" onclick="return confirm('Сохранить инфоормацию о менеджере?')">Сохранить</button>
+</form>
+{% endblock %}
