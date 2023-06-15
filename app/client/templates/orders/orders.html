@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% import 'client_header_macro.html' as header %}
+
+{% block page_title %} Заказы клиента {% endblock %}
+
+{% block page_header %}
+{{ header.client_page_header() }}
+{% endblock %}
+
+{% block page_content %}
+
+<h1>Активные заказы</h1>
+<table class="table table-striped text-center">
+    <thead class="table-primary align-middle">
+    <!--    <th>ID заказа</th>-->
+    <th>Адрес бани</th>
+    <th>Дата заказа</th>
+    <th>Время заказа</th>
+    <th>Стоимость заказа</th>
+    <th>Дата бронирования</th>
+    <th>Время бронирования</th>
+
+    <th>Количество <br> часов <br> бронирования</th>
+    <th>Время окончания бронирования</th>
+    <th>Статус заказа</th>
+    </thead>
+    {% for shop in shops %}
+    {% if not shop['payment_id'] %}
+    <tr>
+        <!--        <td>{{ shop['order_id'] }}</td>-->
+        <td>{{ shop['bath_address'] }}</td>
+        <td>{{ shop['order_date'].strftime('%Y-%m-%d') }}</td>
+        <td>{{ shop['order_date'].strftime('%H:%M') }}</td>
+        <td>{{ shop['order_cost'] }}</td>
+        <td>{{ shop['order_booking_date'].strftime('%Y-%m-%d') }}</td>
+        <td>{{ shop['order_booking_date'].strftime('%H:%M') }}</td>
+        <td>{{ shop['order_rent_in_hours'] }}</td>
+        <td>{{ shop['booking_end_date'].strftime('%H:%M') }}</td>
+        <td>
+            {% if not shop['manager_id'] %}
+            <span class="text-info">
+            Ожидает подтверждения менеджера
+            </span>
+            {% else %}
+            <span class="text-success">
+                Подтвержден менеджером, ожидается оплатa <br> после окончания <br> аренды
+                <span>
+            {% endif %}
+        </td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+
+
+<h1>Завершенные заказы</h1>
+<table class="table table-striped">
+    <thead class="table-primary">
+    <!--    <td>ID платежа</td>-->
+    <th>Тип платежа</th>
+    <th>Реквизиты платежа</th>
+    <th>Дата оплаты</th>
+    <th>Время оплаты</th>
+    </thead>
+    {% for shop in shops %}
+    {% if shop['payment_id'] %}
+    <tr>
+        <!--        <td>{{ shop['payment_id'] }}</td>-->
+        <td>{{ shop['payment_type'] }}</td>
+        <td>{{ shop['payment_requisites'] or 'отсутствуют' }}</td>
+        {% if shop['payment_date'] %}
+        <td>{{ shop['payment_date'].strftime('%Y-%m-%d') }}</td>
+        <td>{{ shop['payment_date'].strftime('%H:%M') }}</td>
+        {% else %}
+        <td>отсутствует</td>
+        <td>отсутствует</td>
+        {% endif %}
+
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+
+{% endblock %}
+

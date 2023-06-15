@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% import 'manager_header_macro.html' as header %}
+
+{% block page_title %} Неоформленные заказы {% endblock %}
+
+{% block page_header %}
+{{ header.manager_page_header() }}
+{% endblock %}
+
+
+{% block page_content %}
+<h1>Неоформленные заказы</h1>
+
+{% if unpaid_orders|length != 0 %}
+<table class="table text-center">
+    <thead class="table-primary">
+<!--    <td>ID заказа</td>-->
+    <td>Дата заказа</td>
+    <td>Время заказа</td>
+    <td>Дата бронирования</td>
+    <td>Время бронирования</td>
+    <td>Стоимость заказа</td>
+    <td>Номер телефона клиента</td>
+    <td class="align-middle">Действие</td>
+    </thead>
+    {% for order in unpaid_orders %}
+    <tr>
+<!--        <td class="align-middle">{{ order['order_id'] }}</td>-->
+        <td class="align-middle">{{ order['order_date'].strftime('%Y-%m-%d') }}</td>
+        <td class="align-middle">{{ order['order_date'].strftime('%H:%m') }}</td>
+        <td class="align-middle">{{ order['order_booking_date'].strftime('%Y-%m-%d') }}</td>
+        <td class="align-middle">{{ order['order_booking_date'].strftime('%H:%M') }}</td>
+        <td class="align-middle">{{ order['order_cost'] }}</td>
+        <td class="align-middle">{{ order['client_phone'] }}</td>
+        <td>
+            <a class="mb-1 btn btn-success" href="{{ url_for('manager.unpaid_orders.make_order', order_id=order['order_id']) }}">Оформить</a>
+            <a class="btn btn-danger" href="{{ url_for('manager.unpaid_orders.cancel_order', order_id=order['order_id']) }}">Отменить</a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>Неоформленные заказы отсутствуют</p>
+{% endif %}
+{% endblock %}

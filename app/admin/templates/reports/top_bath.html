@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% import 'admin_header_macro.html' as header %}
+
+{% block page_title %} Отчет о наиболее востребованных банях {% endblock %}
+
+{% block page_header %}
+{{ header.admin_page_header() }}
+{% endblock %}
+
+{% block page_content %}
+{% if report %}
+<h1>Отчет о наиболее востребованных банях</h1>
+<table class="table text-center table-striped">
+    <thead class="table-primary align-middle">
+    <th>Адрес бани</th>
+    <th>Суммарное кол-во арендованных часов</th>
+    <th>Суммарная выручка за арендованные часы</th>
+    </thead>
+    {% for line in report %}
+    <tr>
+        <td class="align-middle">{{ line['bath_address'] }}</td>
+        <td class="align-middle">{{ line['total_hours'] }}</td>
+        <td class="align-middle">{{ line['total_revenue'] }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+<form class="form" method="post" action="{{ url_for('admin.reports.save_bath_top') }}">
+    <button class="btn btn-success" type="submit">Сохранить отчёт</button>
+</form>
+{% else %}
+<h1>Совершенные платежи отсутствуют</h1>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,19 @@
+{% macro common_header_items() -%}
+<li class="nav-item">
+    <a href="#" class="nav-link">
+        Вы:
+        {% if g.role == 'admin' %}
+        администратор
+        {% elif g.role == 'manager' %}
+        менеджер
+        {% else %}
+        клиент
+        {% endif %}
+    </a>
+</li>
+
+<li class="nav-item">
+    <a class="nav-link" href="{{ url_for('auth.login.logout') }}">Выйти из аккаунта</a>
+</li>
+<hr>
+{%- endmacro %}

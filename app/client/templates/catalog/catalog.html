@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% import 'client_header_macro.html' as header %}
+
+{% block page_title %} Каталог {% endblock %}
+
+{% block page_header %}
+{{ header.client_page_header() }}
+{% endblock %}
+
+{% block page_content %}
+<h1>Каталог бань</h1>
+{% for bath in bathes %}
+{% if bath['bath_status'] == True %}
+<div class="card mb-3">
+    <div class="card-body">
+        <h3 class="card-title">Адрес: {{ bath['bath_address'] }}</h3>
+        <p class="card-text mb-1">График работы: {{ bath['bath_working_hours_from'] }} - {{ bath['bath_working_hours_to'] }}</p>
+        <p class="card-text mb-1">Стоимость часа: {{ bath['bath_per_hour_rent'] }}</p>
+        <a class="btn btn-success" href="{{ url_for('client.catalog.bath_info', bath_id=bath['bath_id']) }}">Подробности</a>
+    </div>
+
+</div>
+{% endif %}
+{% endfor %}
+{% endblock %}

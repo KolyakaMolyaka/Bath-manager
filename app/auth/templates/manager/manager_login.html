@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block page_title %} Авторизация {% endblock %}
+
+{% block page_header %}
+<nav class="navbar navbar-expand-lg bg-body-tertiary mb-4">
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+            <li class="nav-item">
+                <a class="nav-link" href="{{ url_for('auth.login.login_manager') }}">Авторизация</a>
+            </li>
+        </ul>
+    </div>
+</nav>
+{% endblock %}
+
+{% block page_content %}
+<form class="col-md-3"
+      action="{{ url_for('auth.login.login_manager') }}"
+      method="post">
+    <div class="mb-3">
+        <label for="phone" class="form-label">Номер телефона</label>
+        <input type="tel" class="form-control" id="phone" name="phone" required>
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Пароль</label>
+        <input type="password" class="form-control" id="password" name="password" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Войти</button>
+</form>
+{% endblock %}

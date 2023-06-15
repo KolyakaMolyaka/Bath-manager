@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+{% import 'user/auth_header_macro.html' as header %}
+
+{% block page_title %} Регистрация {% endblock %}
+
+{% block page_header %}
+{{ header.auth_header() }}
+{% endblock %}
+
+
+{% block page_content %}
+
+{% for msg in get_flashed_messages() %}
+<div class="btn btn-info text-light">
+    {{ msg }}
+</div>
+{% endfor %}
+
+<h1>Регистрация клиента</h1>
+<form class="col-md-3"
+      action="{{ url_for('auth.register.register') }}"
+      method="post">
+
+
+    {{ form.name.label(class="form-label") }}: {{ form.name(class="form-control mb-3") }}
+    {{ form.surname.label(class="form-label") }}: {{ form.surname(class="form-control mb-3") }}
+    {{ form.lastname.label(class="form-label") }}: {{ form.lastname(class="form-control mb-3") }}
+    {{ form.phone.label(class="form-label") }}: {{ form.phone(class="form-control mb-3") }}
+    {% for err in form.confirm_password.errors %}
+    <div class="btn btn-warning mb-2">
+        {{ err }}
+    </div><br>
+    {% endfor %}
+
+    {{ form.password.label(class="form-label") }}: {{ form.password(type="password", class="form-control mb-3") }}
+    {{ form.confirm_password.label(class="form-label") }}: {{ form.confirm_password(type="password", class="form-control mb-3") }}
+    <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
+</form>
+
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+{% import 'admin_header_macro.html' as header %}
+
+{% block page_title %} Добавление машины {% endblock %}
+
+{% block page_header %}
+{{ header.admin_page_header() }}
+{% endblock %}
+
+{% block page_content %}
+<h1>Добавление новой бани</h1>
+<form class="form" action="{{ url_for('admin.edit_bath.add_bath') }}" method="post">
+    {{ form.address.label(class="form-label") }}: {{ form.address(class="form-control mb-3") }}
+    {{ form.per_hour_rent.label(class="form-label") }}: {{ form.per_hour_rent(class="form-control mb-3") }}
+    {{ form.min_order_time_hours.label(class="form-label") }}: {{ form.min_order_time_hours(class="form-control mb-3") }}
+    {{ form.accessories.label(class="form-label") }} {{ form.accessories(class="mb-3") }} <br>
+    {{ form.working_hours_from.label(class="form-label") }}: {{ form.working_hours_from(class="form-control mb-3") }}
+    {{ form.working_hours_to.label(class="form-label") }}: {{ form.working_hours_to(class="form-control mb-3") }}
+    {{ form.human_capacity.label(class="form-label") }}: {{ form.human_capacity(class="form-control mb-3") }}
+
+    <button class="btn btn-success" type="submit">Добавить</button>
+
+{% endblock %}

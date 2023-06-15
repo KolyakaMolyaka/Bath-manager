@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% import 'client_header_macro.html' as header %}
+
+{% block page_title %} Подробности бани {% endblock %}
+
+{% block page_header %}
+{{ header.client_page_header() }}
+{% endblock %}
+
+
+{% block page_content %}
+{% for msg in get_flashed_messages() %}
+<div class="btn btn-warning text-light mb-3">
+    {{ msg }}
+</div>
+{% endfor %}
+
+{% if shedule %}
+<h1>Текущее расписание бани</h1>
+<table class="table table-striped">
+    <thead class="table table-primary align-middle">
+    <th>Дата бронирования</th>
+    <th>Забронировано с</th>
+    <th>Забронировано по</th>
+    </thead>
+
+    {% for s in shedule %}
+    <tr>
+        <td>{{ s.order_booking_date.strftime('%Y-%m-%d') }}</td>
+        <td>{{ s.order_booking_date.strftime('%H:%M') }}</td>
+        <td>{{ s.booking_end_date.strftime('%H:%M') }}</td>
+    </tr>
+
+    {% endfor %}
+<!--    <tr>{{ shedule }}</tr>-->
+</table>
+{% endif %}
+
+<h1>Подробная информация о бане</h1>
+<div class="card mb-3">
+    <div class="card-body">
+        <h3 class="card-title">Адрес: {{ bath['bath_address'] }}</h3>
+        <p class="card-text mb-1">График работы: {{ bath['bath_working_hours_from'] }} - {{
+            bath['bath_working_hours_to'] }}</p>
+        <p class="card-text mb-1">Стоимость часа: {{ bath['bath_per_hour_rent'] }}</p>
+        <p class="card-text mb-1">Минимальное время аренды (в часах): {{ bath['bath_min_order_time_hours'] }}</p>
+        <p class="card-text mb-1">Банные принадлежности: {{'присутствуют' if bath['bath_accessories'] else 'отсутствуют'
+            }}</p>
+        <p class="card-text mb-1">Вместимость (людей): {{ bath['bath_human_capacity'] }}</p>
+    </div>
+
+</div>
+
+
+<h2>Форма создания заказа</h2>
+<form class="form" method="post" action="{{ url_for('client.catalog.bath_info', bath_id=bath_id) }}">
+    {{ form.order_rent_hours.label(class="form-label") }}: {{ form.order_rent_hours(class="form-control mb-3") }}
+    {{ form.booking_date.label(class="form-label") }}: {{ form.booking_date(class="form-control mb-3") }}
+    {{ form.booking_date_time.label(class="form-label") }}: {{ form.booking_date_time(class="form-control mb-3") }}
+
+    <button class="btn btn-success" type="submit">Заказать</button>
+</form>
+{% endblock %}

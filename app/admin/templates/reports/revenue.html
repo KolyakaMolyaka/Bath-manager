@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% import 'admin_header_macro.html' as header %}
+
+{% block page_title %} Отчет о выручке {% endblock %}
+
+{% block page_header %}
+{{ header.admin_page_header() }}
+{% endblock %}
+
+{% block page_content %}
+
+{% if report %}
+<h1>Отобразить отчёт за промежуток времени</h1>
+<form class="form" action="{{ url_for('admin.reports.revenue') }}">
+    <div class="d-flex mb-4">
+        <div class="me-4">
+            <label>От (включительно)</label>
+            <input type="date" class="form-control" required name="report_from_date" value="{{ month_ago }}">
+        </div>
+        <div>
+            <label>По (включительно)</label>
+            <input type="date" class="form-control" required name="report_to_date" value="{{ today }}">
+        </div>
+    </div>
+    <button class="btn btn-success">Отобразить</button>
+</form>
+
+<h1>Отчет о выручке</h1>
+<table class="table text-center table-striped">
+    <thead class="table-primary align-middle">
+    <tr>
+        <th>#</th>
+        <th>Дата оплаты заказа
+        </th>
+        <th>Время оплаты заказа</th>
+        <th>Сумма оплаты</th>
+        <th>Тип оплаты</th>
+        <th>Реквизиты оплаты</th>
+        <th>Телефон клиента</th>
+    </tr>
+    </thead>
+    {% for line in report %}
+    <tr>
+        <td>{{ loop.index }}</td>
+        <td class="align-middle">{{ line['payment_date'].strftime('%Y-%m-%d') }}</td>
+        <td class="align-middle">{{ line['payment_date'].strftime('%H:%m') }}</td>
+        <td class="align-middle">{{ line['order_cost'] }}</td>
+        <td class="align-middle">{{ line['payment_type'] }}</td>
+        <td class="align-middle">{{ line['payment_requisites'] or '-' }}</td>
+        <td class="align-middle">{{ line['client_phone'] }}</td>
+    </tr>
+    {% endfor %}
+
+</table>
+<form class="form" method="post" action="{{ url_for('admin.reports.save_revenue') }}">
+    <button class="btn btn-success" type="submit">Сохранить отчёт</button>
+</form>
+{% else %}
+<h1>Платежи отсутствуют</h1>
+{% endif %}
+
+{% endblock %}

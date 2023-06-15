@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+{% import 'admin_header_macro.html' as header %}
+
+{% block page_title %} Редактирование менеджеров {% endblock %}
+
+{% block page_header %}
+{{ header.admin_page_header() }}
+{% endblock %}
+
+{% block page_content %}
+<h1>Редактор менеджеров</h1>
+<a class="btn btn-primary mb-3" href="{{ url_for('admin.edit_managers.add_manager') }}">Добавить менеджера</a>
+<table class="table text-center">
+    <thead class="table-primary">
+    <td class="align-middle">Телефон</td>
+    <td class="align-middle">Имя</td>
+    <td class="align-middle">Фамилия</td>
+    <td class="align-middle">Отчество</td>
+    <td class="align-middle">Зарплата</td>
+    <td class="align-middle">Пароль</td>
+    <td class="align-middle">Действие</td>
+    </thead>
+    {% for manager in managers %}
+    <tr>
+        <td class="align-middle">{{ manager['manager_phone'] }}</td>
+        <td class="align-middle">{{ manager['manager_name'] }}</td>
+        <td class="align-middle">{{ manager['manager_surname'] }}</td>
+        <td class="align-middle">{{ manager['manager_lastname'] or '-' }}</td>
+        <td class="align-middle">{{ manager['manager_salary'] }}</td>
+        <td class="align-middle">{{ manager['manager_password'] }}</td>
+        <td>
+            <a class="btn btn-success" href="{{ url_for('admin.edit_managers.edit_manager', phone=manager['manager_phone']) }}">
+                Редактировать
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}
