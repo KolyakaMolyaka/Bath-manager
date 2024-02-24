@@ -105,7 +105,6 @@ def login_manager():
 def login_admin():
 	if request.method == 'POST':
 
-
 		phone = request.form['phone']
 		print(phone)
 		password = request.form['password']
@@ -120,7 +119,6 @@ def login_admin():
 			session['phone'] = phone
 			session['role'] = ADMIN_ROLE
 			return redirect(url_for('admin.reports.revenue'))
-
 
 	return render_template('admin/admin_login.html')
 
