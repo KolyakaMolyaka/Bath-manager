@@ -1,3 +1,4 @@
+import datetime
 import functools
 
 from flask import Blueprint, render_template, request, redirect, url_for, session, g, flash
@@ -55,6 +56,8 @@ def is_logged_in():
 @login_bp.route('/login', methods=['GET', 'POST'])
 @logout_required
 def login():
+	start = datetime.datetime.now()
+
 	form = LoginForm(request.form)
 	if request.method == 'POST' and form.validate():
 		phone = form.phone.data
@@ -72,6 +75,8 @@ def login():
 			session['role'] = CLIENT_ROLE
 			return redirect(url_for('client.catalog.catalog'))
 
+	end = datetime.datetime.now() - start
+	print(end)
 	return render_template('user/user_login.html', form=form)
 
 
@@ -99,6 +104,8 @@ def login_manager():
 @logout_required
 def login_admin():
 	if request.method == 'POST':
+
+
 		phone = request.form['phone']
 		print(phone)
 		password = request.form['password']
@@ -113,6 +120,7 @@ def login_admin():
 			session['phone'] = phone
 			session['role'] = ADMIN_ROLE
 			return redirect(url_for('admin.reports.revenue'))
+
 
 	return render_template('admin/admin_login.html')
 

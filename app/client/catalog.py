@@ -10,8 +10,16 @@ catalog_bp = Blueprint('catalog', __name__)
 
 @catalog_bp.route('/catalog')
 def catalog():
+	# from app.utils import generate_n_managers, generate_n_users, generate_n_bathes
+	# generate_n_managers(1000)
+	# generate_n_users(10000)
+	# generate_n_bathes(50000)
+
 	db = get_db()
+	start = datetime.datetime.now()
 	bathes = db.get_bathes()
+	end = datetime.datetime.now() - start
+	print(end)
 	return render_template('catalog/catalog.html', bathes=bathes)
 
 
