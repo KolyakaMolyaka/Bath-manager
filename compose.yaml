@@ -1,0 +1,55 @@
+# версия Docker Compose.
+version: '3.8'
+
+# Используемые контейнеры.
+services:
+  markeeff_app:
+    # Определение имени контейнера.
+    container_name: markeeff_app
+    # Сборка из Dockerfile в текущей папке.
+    build: .
+    # Проброс портов из сети в контейнер.
+    ports:
+      - 5000:5000
+    # Определение сетей, в которых используется контейнер.
+    networks:
+      - markeeff_net
+      - net
+    # Определение зависимости сервиса. Запуск контейнера после запуска БД.
+    depends_on:
+      - markeeff_db
+
+  markeeff_db:
+    # Определение имени контейнера.
+    container_name: markeeff_db
+    # Сборка из Dockerfile в папке ./app/database.
+    build: app/database/
+    # Имя, используемое в качестве имени хоста (для подключения к БД)
+    hostname: postgres_db
+    # Определение именного хранилища для БД.
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    # Передача контейнеру переменных окружения.
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=1
+      - POSTGRES_DB=markeeff_db
+    # Проброс портов из сети в контейнер.
+    ports:
+      - 5432:5432
+    # Определение сетей, в которых используется контейнер.
+    networks:
+      - markeeff_net
+
+# Используемые хранилища данных.
+volumes:
+  postgres_data:
+
+# Использованные сети.
+networks:
+  net:
+    name: net
+    driver: bridge
+  markeeff_net:
+    name: markeeff_net
+    driver: bridge

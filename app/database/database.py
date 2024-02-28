@@ -149,7 +149,8 @@ class PostgreSQL:
 			self.execute_query(f"call add_client('{phone}', '{password}', '{name}', '{surname}', '{lastname}')")
 
 	def set_monetary_policy(self, cur):
-		cur.execute("SET lc_monetary='ru_RU.UTF8'")
+		pass
+		# cur.execute("SET lc_monetary='ru_RU.UTF8'")
 
 	def execute_query(self, sql: str, params=None):
 		with self.conn.cursor() as cur:
