@@ -66,8 +66,15 @@ def save_revenue():
 @has_role(ADMIN_ROLE)
 @login_required
 def top_bath():
+	"""
+	Получение отчёта о наиболее востребованных банях
+	:return: html страница с данными отчёта
+	"""
+	# получение доступа к БД
 	db = get_db()
+	# получение данных для отчёта
 	report = db.get_top_bath_report()
+	# рендеринг html страницы с полученными для отчёта данными
 	return render_template('reports/top_bath.html', report=report)
 
 @reports_bp.route('/save_bath_top', methods=['POST'])

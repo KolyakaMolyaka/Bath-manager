@@ -11,8 +11,15 @@ edit_managers_bp = Blueprint('edit_managers', __name__)
 @login_required
 def edit_managers():
 	db = get_db()
-	managers = db.execute_query_fetchall("SELECT * from manager")
-	return render_template('edit_managers/edit_managers.html', managers=managers)
+	hide_archived = request.args.get('hide_archived')
+	if hide_archived in (None, ''):
+		hide_archived = False
+	SQL = 'SELECT * from manager'
+	if hide_archived:
+		SQL += f" WHERE archived = False"
+	managers = db.execute_query_fetchall(SQL)
+
+	return render_template('edit_managers/edit_managers.html', managers=managers, checked=hide_archived)
 
 
 @edit_managers_bp.route('/edit_manager/<phone>', methods=['GET', 'POST'])

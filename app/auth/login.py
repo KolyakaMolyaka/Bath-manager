@@ -9,22 +9,42 @@ from app.forms import LoginForm
 login_bp = Blueprint('login', __name__)
 
 
-def has_role(role):
+def has_role(role: str):
+	"""
+	Декоратор проверки роли у пользователя
+	:param role:str роль, наличие которой проверяется
+	:return:
+	"""
 	def wrapped_func(view):
 		@functools.wraps(view)
 		def wrapped_view(**kwargs):
+			"""
+			Вызов функции, соответствующего view для пользователя в случае,
+			если он имеет заданную роль.
+			:param kwargs: параметры соответствующей view функции
+			:return:
+			"""
 			if role == g.role:
 				return view(**kwargs)
 			return redirect(url_for('index'))
-
 		return wrapped_view
-
 	return wrapped_func
 
 
 def login_required(view):
+	"""
+	Декоратор проверки авторизации пользователя
+	:param view: функция обработки view
+	:return:
+	"""
 	@functools.wraps(view)
 	def wrapped_view(**kwargs):
+		"""
+		Проверка наличия идентификатора пользователя в сессии.
+		Если он отсутствует, то пользователь перенаправляется на страницу авторизации.
+		:param kwargs: параметры соответствующей view функции
+		:return:
+		"""
 		if g.phone is None:
 			return redirect(url_for('auth.login.login'))
 		return view(**kwargs)
@@ -33,8 +53,19 @@ def login_required(view):
 
 
 def logout_required(view):
+	"""
+	Декоратор проверки, что пользователь НЕ авторизован
+	:param view: функция обработки view
+	:return:
+	"""
 	@functools.wraps(view)
 	def wrapped_view(**kwargs):
+		"""
+		Проверка наличия идентификатора пользователя в сессии.
+		Если он присутствует, то пользователь перенаправляется на главную страницу.
+		:param kwargs:
+		:return:
+		"""
 		if g.phone is not None:
 			return redirect(url_for('index'))
 		return view(**kwargs)
@@ -56,27 +87,37 @@ def is_logged_in():
 @login_bp.route('/login', methods=['GET', 'POST'])
 @logout_required
 def login():
-	start = datetime.datetime.now()
-
+	"""
+	Авторизация пользователя
+	:return: html страница для авторизации
+	"""
+	# создание формы для авторизации с требуемыми реквизитами
 	form = LoginForm(request.form)
-	if request.method == 'POST' and form.validate():
-		phone = form.phone.data
 
+	# если пользователь отравил данные и они валидны (соотв. типов и ограничений)
+	if request.method == 'POST' and form.validate():
+		# получение реквизитов авторизации
+		phone = form.phone.data
 		password = form.password.data
 
+		# получение доступа к БД
 		db = get_db()
-		right_password = str(db.get_client_password(phone)['get_client_password'])
 
+		# проверка пароля
+		right_password = str(db.get_client_password(phone)['get_client_password'])
 		if password != right_password:
+			# если парль неправильный, то возвращаем html страницу с авторизацией
+			# и информационным сообщением
 			flash('Неправильный пароль')
 			return redirect(url_for('auth.login.login'))
 		else:
+			# сохраняем в сессии авторизованного пользователя
+			# и перенаправляем его на страницу с каталогом
 			session['phone'] = phone
 			session['role'] = CLIENT_ROLE
 			return redirect(url_for('client.catalog.catalog'))
 
-	end = datetime.datetime.now() - start
-	print(end)
+	# возвращаем пользователю html страницу для авторизации
 	return render_template('user/user_login.html', form=form)
 
 
